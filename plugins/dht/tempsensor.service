@@ -1,0 +1,15 @@
+[Unit]
+Description=Temperature/Humidity sensor service for DHT
+After=syslog.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/pydht
+ExecStart=/root/pydht/sensor.py
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
