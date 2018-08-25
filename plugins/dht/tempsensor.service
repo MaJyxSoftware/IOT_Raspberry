@@ -1,6 +1,6 @@
 [Unit]
 Description=Temperature/Humidity sensor service for DHT
-After=syslog.target
+After=syslog.target network.target
 
 [Service]
 Type=simple
