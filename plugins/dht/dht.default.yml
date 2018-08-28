@@ -1,0 +1,16 @@
+sensor:
+  name: "dht-01"
+  model_number: 11
+  pin: 18
+  location: "living room"
+  refresh_rate: 30
+
+influxdb:
+  host: "127.0.0.1"
+  port: 8086
+  auth:
+    username: "test"
+    password: "test"
+  database: "db"
+  measurement: "sensors"
+  

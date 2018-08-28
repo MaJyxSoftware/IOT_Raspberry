@@ -4,10 +4,8 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-User=root
-Group=root
-WorkingDirectory=/root/pydht
-ExecStart=/root/pydht/sensor.py
+RuntimeDirectory=/var/run/sensors
+ExecStart=/usr/local/bin/sensor-dhtd
 StandardOutput=syslog
 StandardError=syslog
 
