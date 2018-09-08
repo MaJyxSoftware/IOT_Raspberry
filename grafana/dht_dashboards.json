@@ -59,8 +59,8 @@
       "colorBackground": false,
       "colorValue": false,
       "colors": [
-        "#299c46",
-        "#cca300",
+        "#64b0c8",
+        "#f2c96d",
         "#d44a3a"
       ],
       "datasource": "${DS_IOTDB}",
@@ -134,9 +134,9 @@
           ],
           "tags": [
             {
-              "key": "room",
+              "key": "location",
               "operator": "=",
-              "value": "Salon"
+              "value": "living room"
             }
           ]
         }
@@ -234,7 +234,13 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "location",
+              "operator": "=",
+              "value": "living room"
+            }
+          ]
         }
       ],
       "thresholds": "60,80",
@@ -314,7 +320,13 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "location",
+              "operator": "=",
+              "value": "living room"
+            }
+          ]
         }
       ],
       "thresholds": [],
@@ -411,7 +423,13 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "location",
+              "operator": "=",
+              "value": "living room"
+            }
+          ]
         }
       ],
       "thresholds": [],
@@ -463,7 +481,7 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -492,7 +510,7 @@
     ]
   },
   "timezone": "",
-  "title": "Home",
+  "title": "My Home",
   "uid": "ulcjrXkgk",
-  "version": 21
+  "version": 29
 }

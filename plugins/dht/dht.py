@@ -6,9 +6,6 @@ import Adafruit_DHT
 from influxdb import InfluxDBClient
 
 CONFIG_FILE = "/etc/sensors/dht.yml"
-CONFIG = {}
-CLIENT = None
-ONLINE = True
 OFFLINE_DB = "/var/run/sensors/dht_measurements.yml"
 
 MAX_REFRESH = {
@@ -46,11 +43,11 @@ def configure():
         CONFIG['sensor']['refresh_rate'] = MAX_REFRESH[CONFIG['sensor']['model_number']]
         print("[WARN] Your refresh rate is too high for this model: set to default")
     
-    CLIENT = InfluxDBClient(host=CONFIG['influxdb']['host'], port=CONFIG['influxdb']['port'], user=CONFIG['influxdb']
+    CLIENT = InfluxDBClient(host=CONFIG['influxdb']['host'], port=CONFIG['influxdb']['port'], username=CONFIG['influxdb']
                     ['auth']['username'], password=CONFIG['influxdb']['auth']['password'], database=CONFIG['influxdb']['database'])
+    return CONFIG,CLIENT
 
-
-def get_mesure():
+def get_mesure(CONFIG): 
     humidity, temperature = Adafruit_DHT.read(
         CONFIG['sensor']['model_number'], CONFIG['sensor']['pin'])
 
@@ -66,7 +63,7 @@ def get_mesure():
     return humidity, temperature
 
 
-def send_mesure(humidity, temperature):  
+def send_mesure(humidity, temperature, CONFIG, CLIENT, ONLINE):  
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     data = []
@@ -75,7 +72,7 @@ def send_mesure(humidity, temperature):
         with open(OFFLINE_DB, 'r') as stream:
             data = yaml.load(stream)
 
-    data.push({
+    data.append({
             "measurement": CONFIG['influxdb']['measurement'],
             "tags": {
                 "location": CONFIG['sensor']['location'],
@@ -101,12 +98,15 @@ def send_mesure(humidity, temperature):
 
 
 def main():
-    configure()
+    
+    CONFIG, CLIENT = configure()
+
+    ONLINE = True
 
     while True:
 
-        humidity, temperature = get_mesure()
-        send_mesure(humidity, temperature)
+        humidity, temperature = get_mesure(CONFIG)
+        send_mesure(humidity, temperature, CONFIG, CLIENT, ONLINE)
         time.sleep(CONFIG['sensor']['refresh_rate'])
 
 if __name__ == "__main__":
