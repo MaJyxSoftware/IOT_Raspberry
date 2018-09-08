@@ -53,12 +53,12 @@ def get_mesure(CONFIG):
 
     if not humidity or not temperature:
         time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
-        return get_mesure
+        return get_mesure(CONFIG)
 
     # Glitch fix
     if humidity > 100:
         time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
-        return get_mesure
+        return get_mesure(CONFIG)
 
     return humidity, temperature
 
