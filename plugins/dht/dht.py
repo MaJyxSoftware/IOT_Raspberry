@@ -48,20 +48,24 @@ def configure():
     return CONFIG,CLIENT
 
 def get_mesure(CONFIG): 
-    humidity, temperature = Adafruit_DHT.read(
-        CONFIG['sensor']['model_number'], CONFIG['sensor']['pin'])
+    
+    try:
+    	humidity, temperature = Adafruit_DHT.read(
+        	CONFIG['sensor']['model_number'], CONFIG['sensor']['pin'])
 
-    if not humidity or not temperature:
-        time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
-        return get_mesure(CONFIG)
+    	if not humidity or not temperature:
+        	time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
+        	return get_mesure(CONFIG)
 
-    # Glitch fix
-    if humidity > 100:
-        time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
-        return get_mesure(CONFIG)
+    	# Glitch fix
+    	if humidity > 100:
+    	    time.sleep(MAX_REFRESH[CONFIG['sensor']['model_number']])
+    	    return get_mesure(CONFIG)
+	
+	return humidity, temperature
 
-    return humidity, temperature
-
+    except:
+	return -1,-1
 
 def send_mesure(humidity, temperature, CONFIG, CLIENT, ONLINE):  
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -106,7 +110,12 @@ def main():
     while True:
 
         humidity, temperature = get_mesure(CONFIG)
-        send_mesure(humidity, temperature, CONFIG, CLIENT, ONLINE)
+	if humidity == -1 and temperature == -1:
+		continue
+	try:
+        	send_mesure(humidity, temperature, CONFIG, CLIENT, ONLINE)
+	except:
+		continue
         time.sleep(CONFIG['sensor']['refresh_rate'])
 
 if __name__ == "__main__":
